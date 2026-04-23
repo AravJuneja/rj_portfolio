@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>R.J. Carstens | Filmmaker</title>
+  <title>R.J. Carstens</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -15,14 +15,21 @@
   <aside class="sidebar">
     <div class="sidebar-top">
       <h1>R.J. Carstens</h1>
-      <p class="tagline">Filmmaker</p>
+      <p class="tagline"></p>
     </div>
 
     <nav>
       <a href="#" class="nav-link active" data-page="about">About</a>
-      <a href="#" class="nav-link" data-page="films">Films</a>
+      <div class="nav-tree" id="films-tree">
+        <a href="#" class="nav-link nav-tree-root" data-page="films"><span class="tree-arrow">&#9654;</span> Films</a>
+        <div class="nav-tree-children">
+          <a href="#" class="nav-link nav-child" data-page="films" data-sub="films-myfilms"><span class="tree-branch">&#9500;&#9472;</span> My Films</a>
+          <a href="#" class="nav-link nav-child" data-page="films" data-sub="films-gripwork"><span class="tree-branch">&#9500;&#9472;</span> Grip Work</a>
+          <a href="#" class="nav-link nav-child" data-page="films" data-sub="films-acting"><span class="tree-branch">&#9492;&#9472;</span> Acting</a>
+        </div>
+      </div>
       <a href="#" class="nav-link" data-page="music">Music</a>
-      <a href="#" class="nav-link" data-page="events">Live Events</a>
+      <a href="#" class="nav-link" data-page="events">Videography</a>
       <a href="#" class="nav-link" data-page="contact">Contact</a>
     </nav>
 
@@ -51,29 +58,48 @@
     <!-- Films -->
     <section id="films" class="page">
       <h2>Films</h2>
-      <div class="film-grid">
 
-        <article>
-          <div class="film-embed" data-video="2o8tiJGfPQw">
-            <img src="https://img.youtube.com/vi/2o8tiJGfPQw/hqdefault.jpg" alt="Call My Bluff Music Video thumbnail" />
-            <button class="play-btn" aria-label="Play Call My Bluff">&#9654;</button>
-          </div>
-          <h3>Call My Bluff</h3>
-          <p class="film-meta">Music Video</p>
-          <p>Short description of the film. What is it about? What inspired it?</p>
-        </article>
+      <div id="films-myfilms" class="film-subsection">
+        <div class="subsection-label"><span class="sub-branch">&#9500;&#9472;</span> my-films/</div>
+        <div class="film-grid">
 
-        <article>
-          <div class="film-embed" data-video="yeNmk7MNz_Y">
-            <img src="https://img.youtube.com/vi/yeNmk7MNz_Y/hqdefault.jpg" alt="December 17 2025 thumbnail" />
-            <button class="play-btn" aria-label="Play December 17 2025">&#9654;</button>
-          </div>
-          <h3>December 17 2025</h3>
-          <p class="film-meta">2025</p>
-          <p>Short description of the film. What is it about? What inspired it?</p>
-        </article>
+          <article>
+            <div class="film-embed" data-video="2o8tiJGfPQw">
+              <img src="https://img.youtube.com/vi/2o8tiJGfPQw/hqdefault.jpg" alt="Call My Bluff Music Video thumbnail" />
+              <button class="play-btn" aria-label="Play Call My Bluff">&#9654;</button>
+            </div>
+            <h3>Call My Bluff</h3>
+            <p class="film-meta">Music Video</p>
+            <p>Short description of the film. What is it about? What inspired it?</p>
+          </article>
 
+          <article>
+            <div class="film-embed" data-video="yeNmk7MNz_Y">
+              <img src="https://img.youtube.com/vi/yeNmk7MNz_Y/hqdefault.jpg" alt="December 17 2025 thumbnail" />
+              <button class="play-btn" aria-label="Play December 17 2025">&#9654;</button>
+            </div>
+            <h3>December 17 2025</h3>
+            <p class="film-meta">2025</p>
+            <p>Short description of the film. What is it about? What inspired it?</p>
+          </article>
+
+        </div>
       </div>
+
+      <div id="films-gripwork" class="film-subsection">
+        <div class="subsection-label"><span class="sub-branch">&#9500;&#9472;</span> grip-work/</div>
+        <div class="film-grid">
+          <p class="subsection-empty">No films yet.</p>
+        </div>
+      </div>
+
+      <div id="films-acting" class="film-subsection">
+        <div class="subsection-label"><span class="sub-branch">&#9492;&#9472;</span> acting/</div>
+        <div class="film-grid">
+          <p class="subsection-empty">No films yet.</p>
+        </div>
+      </div>
+
     </section>
 
     <!-- Music -->
@@ -204,20 +230,37 @@
   <script>
     const navLinks = document.querySelectorAll('.nav-link');
     const pages = document.querySelectorAll('.page');
+    const filmsTree = document.getElementById('films-tree');
 
     navLinks.forEach(function(link) {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         var target = link.dataset.page;
+        var sub = link.dataset.sub;
 
-        // Update nav active state
+        if (link.classList.contains('nav-tree-root')) {
+          filmsTree.classList.toggle('expanded');
+        } else if (sub) {
+          filmsTree.classList.add('expanded');
+        } else {
+          filmsTree.classList.remove('expanded');
+        }
+
         navLinks.forEach(function(l) { l.classList.remove('active'); });
         link.classList.add('active');
 
-        // Show the target page, hide the rest
         pages.forEach(function(page) {
           page.classList.toggle('active', page.id === target);
         });
+
+        if (sub) {
+          var subEl = document.getElementById(sub);
+          if (subEl) {
+            setTimeout(function() {
+              subEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+          }
+        }
       });
     });
 
